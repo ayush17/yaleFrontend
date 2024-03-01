@@ -1,0 +1,47 @@
+[
+  {
+    "roomId": 1,
+    "owner": "Ayush",
+    "topic": "Statistics",
+    "maxCount": 10,
+    "participants": [
+      {"userId": 101, "username": "Ayush"},
+      {"userId": 102, "username": "Pranshu"},
+      {"userId": 103, "username": "Sara"},
+      {"userId": 104, "username": "Alex"}
+    ],
+    "location": {"latitude": 37.7749, "longitude": -122.4194},
+    "time": "2024-02-29T14:30:00",
+    "description": "Discuss and explore statistical concepts and applications."
+  },
+  {
+    "roomId": 2,
+    "owner": "Pranshu",
+    "topic": "LLM",
+    "maxCount": 8,
+    "participants": [
+      {"userId": 201, "username": "Ayush"},
+      {"userId": 202, "username": "Pranshu"},
+      {"userId": 203, "username": "Liam"},
+      {"userId": 204, "username": "Sophie"}
+    ],
+    "location": {"latitude": 40.7128, "longitude": -74.0060},
+    "time": "2024-03-01T18:00:00",
+    "description": "Legal, Letters, and Management discussion and insights."
+  },
+  {
+    "roomId": 3,
+    "owner": "Ayush",
+    "topic": "Machine Learning",
+    "maxCount": 15,
+    "participants": [
+      {"userId": 301, "username": "Ayush"},
+      {"userId": 302, "username": "Pranshu"},
+      {"userId": 303, "username": "Eva"},
+      {"userId": 304, "username": "Ryan"}
+    ],
+    "location": {"latitude": 34.0522, "longitude": -118.2437},
+    "time": "2024-03-02T08:00:00",
+    "description": "Explore the fascinating world of machine learning and AI."
+  }
+]
