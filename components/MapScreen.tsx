@@ -60,7 +60,7 @@ const MapScreen = ({route}) => {
           longitudeDelta: 0.015,
         }}
         customMapStyle={mapStyle}>
-        <MapViewDirections
+        {/* <MapViewDirections
           origin={{
             latitude: loc.coords.latitude,
             longitude: loc.coords.longitude,
@@ -70,10 +70,9 @@ const MapScreen = ({route}) => {
             longitude: -71.01139146046185,
           }}
           // set up environment variable for this
-          apikey={'AIzaSyCRFt7ZjyXEXfSliSCfK7Uzc-iH179V_6M'}
           strokeWidth={3}
           strokeColor="hotpink"
-        />
+        /> */}
         <Marker
           draggable
           coordinate={{
