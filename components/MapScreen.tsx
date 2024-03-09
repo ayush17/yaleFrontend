@@ -7,14 +7,12 @@ import {ToastAndroid} from 'react-native';
 import CustomMarkerImage from '../icons/images1.png';
 const MapScreen = ({route}) => {
   const {location, destinationLocation} = route.params;
-
   const [loc, setLocation] = useState({});
   const [errorMsg, setErrorMsg] = useState(null);
-  const [averageLatitude,setaverageLatitude]=useState(0);
-  const [averageLongitude,setaverageLongitude]=useState(0);
-  const [latitudeDelta,setlatitudeDelta]=useState(0);
-  const [longitudeDelta,setlongitudeDelta]=useState(0);
-
+  const [averageLatitude, setaverageLatitude] = useState(0);
+  const [averageLongitude, setaverageLongitude] = useState(0);
+  const [latitudeDelta, setlatitudeDelta] = useState(0);
+  const [longitudeDelta, setlongitudeDelta] = useState(0);
 
   useEffect(() => {
     (async () => {
@@ -26,32 +24,39 @@ const MapScreen = ({route}) => {
       }
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
-      setZoomLocation()
+      setZoomLocation(location);
     })();
   }, []);
+  if (!(Object.keys(loc).length > 0)) {
+    return null; // or return a loading indicator
+  }
 
-  setZoomLocation=(loc){
+  function setZoomLocation(loc) {
     // Calculate the average latitude and longitude of the markers
-    const averageLatitude = (37.78825 + loc.coords.latitude) / 2;
-    const averageLongitude = (-122.4324 + loc.coords.longitude) / 2;
-  
+    const averageLatitude = loc.coords.latitude;
+    const averageLongitude = loc.coords.longitude;
+    setaverageLatitude(averageLatitude);
+    setaverageLongitude(averageLongitude);
+
     // Calculate the difference between the latitude and longitude of the markers
     const latitudeDifference = Math.abs(37.78825 - loc.coords.latitude);
     const longitudeDifference = Math.abs(-122.4324 - loc.coords.longitude);
-  
+
     // Calculate the zoom level by adding a buffer to the difference
     const latitudeDelta = latitudeDifference * 2; // Adjust the multiplier as needed
     const longitudeDelta = longitudeDifference * 2; // Adjust the multiplier as needed
+    setlatitudeDelta(latitudeDelta);
+    setlongitudeDelta(longitudeDelta);
   }
   return (
     <View style={styles.container}>
       <MapView
         style={styles.mapStyle}
         initialRegion={{
-          latitude: 37.78825,
-          longitude: -122.4324,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
+          latitude: loc.coords.latitude,
+          longitude: loc.coords.longitude,
+          latitudeDelta: 0.0,
+          longitudeDelta: 0.015,
         }}
         customMapStyle={mapStyle}>
         <Marker
