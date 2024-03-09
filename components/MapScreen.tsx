@@ -5,6 +5,7 @@ import MapView, {Marker, Polyline, Callout} from 'react-native-maps';
 import * as Location from 'expo-location';
 import {ToastAndroid} from 'react-native';
 import CustomMarkerImage from '../icons/images1.png';
+import MapViewDirections from 'react-native-maps-directions';
 const MapScreen = ({route}) => {
   const {location, destinationLocation} = route.params;
   const [loc, setLocation] = useState({});
@@ -55,10 +56,24 @@ const MapScreen = ({route}) => {
         initialRegion={{
           latitude: loc.coords.latitude,
           longitude: loc.coords.longitude,
-          latitudeDelta: 0.0,
+          latitudeDelta: 0.015,
           longitudeDelta: 0.015,
         }}
         customMapStyle={mapStyle}>
+        <MapViewDirections
+          origin={{
+            latitude: loc.coords.latitude,
+            longitude: loc.coords.longitude,
+          }}
+          destination={{
+            latitude: 41.6229059350947,
+            longitude: -71.01139146046185,
+          }}
+          // set up environment variable for this
+          apikey={'AIzaSyCRFt7ZjyXEXfSliSCfK7Uzc-iH179V_6M'}
+          strokeWidth={3}
+          strokeColor="hotpink"
+        />
         <Marker
           draggable
           coordinate={{

@@ -8473,7 +8473,7 @@ promzard@^1.0.0:
   dependencies:
     read "^2.0.0"
 
-prop-types@^15.7.2, prop-types@^15.8.1:
+prop-types@^15.6.0, prop-types@^15.7.2, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.npmjs.org/prop-types/-/prop-types-15.8.1.tgz"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -8615,7 +8615,15 @@ react-native-get-location@^4.0.1:
   resolved "https://registry.npmjs.org/react-native-get-location/-/react-native-get-location-4.0.1.tgz"
   integrity sha512-blDWHI7f+gfzXbrrlFNRjpVMuuMTng3hsKR0Yi3iPNIM5LRs0EJDYvvdQaauFk7mJPryOxRE3+A5XAr+3kkpFg==
 
-react-native-maps@^1.10.3:
+react-native-maps-directions@^1.9.0:
+  version "1.9.0"
+  resolved "https://registry.npmjs.org/react-native-maps-directions/-/react-native-maps-directions-1.9.0.tgz"
+  integrity sha512-68SrMOUg4WQ5PmpS9sNOTZaYtdyVYJnnjQOOhABrgiKnb5BXCZRU2gDoS11gYf23hjUBjq8JXzgfn37WcINLwA==
+  dependencies:
+    lodash.isequal "^4.5.0"
+    prop-types "^15.6.0"
+
+react-native-maps@^1.10.3, react-native-maps@>=1.0.0:
   version "1.10.3"
   resolved "https://registry.npmjs.org/react-native-maps/-/react-native-maps-1.10.3.tgz"
   integrity sha512-P8/Viq5vgW9FRhvfDFQHxq02cZUcDJu6VbBZar7c/voGDbD5nrTIA0qlpiUAmrs1ikd8+7S4QjXQlorppBBMvA==
