@@ -9,6 +9,11 @@
       android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
       android:theme="@style/AppTheme">
+      <!-- Define ACCESS_FINE_LOCATION if you will use enableHighAccuracy=true  -->
+      <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+      <meta-data
+      android:name="com.google.android.geo.API_KEY"
+      android:value="AIzaSyCRFt7ZjyXEXfSliSCfK7Uzc-iH179V_6M"/>
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"
