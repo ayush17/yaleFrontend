@@ -60,6 +60,7 @@ const MapScreen = ({route}) => {
           longitudeDelta: 0.015,
         }}
         customMapStyle={mapStyle}>
+        {/* To draw the directions of map */}
         {/* <MapViewDirections
           origin={{
             latitude: loc.coords.latitude,
@@ -103,6 +104,7 @@ const MapScreen = ({route}) => {
             // onDragEnd={(e) => alert(JSON.stringify(e.nativeEvent.coordinate))}
             image={CustomMarkerImage} // Use custom marker image
           >
+            {/* Styling the message of the map */}
             <Callout>
               <View style={styles.calloutContainer}>
                 <Text style={styles.calloutTitle}>Test Marker</Text>
