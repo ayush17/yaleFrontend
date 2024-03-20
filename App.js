@@ -1,16 +1,17 @@
-import React from "react";
-import "react-native-gesture-handler";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import { Text } from "react-native";
-import { useChatClient } from "./useChatClient";
-import { OverlayProvider } from "stream-chat-expo";
-import ChatTab from "./components/chat";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import React from 'react';
+import 'react-native-gesture-handler';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {Text} from 'react-native';
+import {useChatClient} from './useChatClient';
+import {OverlayProvider} from 'stream-chat-expo';
+import ChatTab from './components/chat';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 const Stack = createStackNavigator();
-import Home from "./screens/Home";
-import JoinedRooms from "./components/joinedRoom";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import Home from './screens/Home';
+import JoinedRooms from './components/joinedRoom';
+import ProfileTab from './components/profile';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 const Tab = createBottomTabNavigator();
 
@@ -21,14 +22,14 @@ const HomeStack = () => {
         name="Home"
         component={Home}
         options={{
-          title: "Rooms",
+          title: 'Rooms',
           headerStyle: {
-            backgroundColor: "#E8E8E8",
+            backgroundColor: '#E8E8E8',
           },
-          headerTintColor: "black",
-          headerTitleAlign: "center",
+          headerTintColor: 'black',
+          headerTitleAlign: 'center',
           headerTitleStyle: {
-            fontWeight: "bold",
+            fontWeight: 'bold',
           },
         }}
       />
@@ -41,14 +42,13 @@ const JoinedRoomsStack = () => {
     <Stack.Navigator
       screenOptions={{
         headerShown: false, // Hide the header
-      }}
-    >
+      }}>
       <Stack.Screen name="JoinedRooms" component={JoinedRooms} />
     </Stack.Navigator>
   );
 };
 const ChatStack = () => {
-  const { clientIsReady } = useChatClient();
+  const {clientIsReady} = useChatClient();
 
   if (!clientIsReady) {
     console.log(clientIsReady);
@@ -63,19 +63,29 @@ const ChatStack = () => {
     </OverlayProvider>
   );
 };
+const ProfileStack = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false, // Hide the header
+      }}>
+      <Stack.Screen name="ProfileRoom" component={ProfileTab} />
+    </Stack.Navigator>
+  );
+};
 
 export default () => {
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={{flex: 1}}>
       <NavigationContainer>
         <Tab.Navigator
           screenOptions={{
             headerShown: false, // Hide the header
-          }}
-        >
+          }}>
           <Tab.Screen name="Home" component={HomeStack} />
           <Tab.Screen name="JoinedRooms" component={JoinedRoomsStack} />
           <Tab.Screen name="ChatTab" component={ChatStack} />
+          <Tab.Screen name="Profile" component={ProfileStack} />
         </Tab.Navigator>
       </NavigationContainer>
     </GestureHandlerRootView>

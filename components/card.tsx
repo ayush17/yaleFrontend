@@ -11,7 +11,7 @@ import {Text, View, Image, TouchableOpacity} from 'react-native';
 import {Avatar} from '@rneui/themed';
 import 'react-native-url-polyfill/auto';
 
-function Card(): React.JSX.Element {
+function Card({name, isProfileId, description, topic}): React.JSX.Element {
   const handlePress = () => {
     // Your button press logic here
     console.log('Button pressed');
@@ -39,10 +39,8 @@ function Card(): React.JSX.Element {
         />
       </View>
       <View style={{marginLeft: 25}}>
-        <Text style={{fontSize: 20}}>Katie's Room</Text>
-        <Text style={{width: '60%', marginTop: 1}}>
-          Learning about LLMs and stuff, join if you wanna learn too!.
-        </Text>
+        <Text style={{fontSize: 20}}>{name}'s Room</Text>
+        <Text style={{width: '60%', marginTop: 1}}>{description}</Text>
         <View
           style={{
             display: 'flex',
@@ -69,14 +67,14 @@ function Card(): React.JSX.Element {
             alignItems: 'center',
           }}>
           <Image source={require('../icons/Book_open.jpg')} />
-          <Text style={{marginLeft: 7}}>Statistics</Text>
+          <Text style={{marginLeft: 7}}>{topic}</Text>
         </View>
         {/* Button */}
         <View
           style={{
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: '#5DB075',
+            backgroundColor: isProfileId ? '#D3D3D3' : '#5DB075',
             borderRadius: 10,
             marginTop: 10,
             width: '60%',
@@ -92,7 +90,7 @@ function Card(): React.JSX.Element {
                 color: 'white',
                 fontSize: 16,
               }}>
-              Join
+              {isProfileId ? 'Edit' : 'Join'}
             </Text>
           </TouchableOpacity>
         </View>
