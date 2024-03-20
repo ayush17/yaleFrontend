@@ -20,6 +20,7 @@ import {
   MessageInput,
 } from 'stream-chat-expo';
 import {useAppContext} from './components/AppContext';
+import ProfileTab from './components/profile';
 
 const Tab = createBottomTabNavigator();
 
@@ -113,6 +114,16 @@ const ChatStack = () => {
     </OverlayProvider>
   );
 };
+const ProfileStack = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false, // Hide the header
+      }}>
+      <Stack.Screen name="ProfileRoom" component={ProfileTab} />
+    </Stack.Navigator>
+  );
+};
 
 export default () => {
   return (
@@ -125,6 +136,7 @@ export default () => {
           <Tab.Screen name="Home" component={HomeStack} />
           <Tab.Screen name="JoinedRooms" component={JoinedRoomsStack} />
           <Tab.Screen name="ChatTab" component={ChatStack} />
+          <Tab.Screen name="Profile" component={ProfileStack} />
         </Tab.Navigator>
       </NavigationContainer>
     </GestureHandlerRootView>
