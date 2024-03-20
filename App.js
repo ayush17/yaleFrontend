@@ -1,16 +1,25 @@
-import React from "react";
-import "react-native-gesture-handler";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import { Text } from "react-native";
-import { useChatClient } from "./useChatClient";
-import { OverlayProvider } from "stream-chat-expo";
-import ChatTab from "./components/chat";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import React from 'react';
+import 'react-native-gesture-handler';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {Text} from 'react-native';
+import {useChatClient} from './useChatClient';
+import {Chat, OverlayProvider} from 'stream-chat-expo';
+import ChatTab from './components/chat';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 const Stack = createStackNavigator();
-import Home from "./screens/Home";
-import JoinedRooms from "./components/joinedRoom";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import Home from './screens/Home';
+import JoinedRooms from './components/joinedRoom';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {StreamChat} from 'stream-chat';
+import {chatApiKey} from './chatConfig';
+import {
+  ChannelList,
+  Channel,
+  MessageList,
+  MessageInput,
+} from 'stream-chat-expo';
+import {useAppContext} from './components/AppContext';
 
 const Tab = createBottomTabNavigator();
 
@@ -21,14 +30,14 @@ const HomeStack = () => {
         name="Home"
         component={Home}
         options={{
-          title: "Rooms",
+          title: 'Rooms',
           headerStyle: {
-            backgroundColor: "#E8E8E8",
+            backgroundColor: '#E8E8E8',
           },
-          headerTintColor: "black",
-          headerTitleAlign: "center",
+          headerTintColor: 'black',
+          headerTitleAlign: 'center',
           headerTitleStyle: {
-            fontWeight: "bold",
+            fontWeight: 'bold',
           },
         }}
       />
@@ -41,14 +50,51 @@ const JoinedRoomsStack = () => {
     <Stack.Navigator
       screenOptions={{
         headerShown: false, // Hide the header
-      }}
-    >
+      }}>
       <Stack.Screen name="JoinedRooms" component={JoinedRooms} />
     </Stack.Navigator>
   );
 };
+
+const ChannelListScreen = props => {
+  return (
+    <ChannelList
+      onSelect={channel => {
+        console.log('Selected channel:', channel);
+        const {navigation} = props;
+        if (navigation) {
+          console.log('Navigation prop:', navigation);
+          navigation.navigate('ChannelScreen', {
+            channel,
+          });
+        } else {
+          console.warn('Navigation prop is missing.');
+        }
+      }}
+    />
+  );
+};
+
+const ChannelScreen = props => {
+  const {route} = props;
+  const {
+    params: {channel},
+  } = route;
+  // const {channel} = useAppContext();
+  //console log props
+  console.log('Props in ChannelScreen:', props);
+  console.log('Channel in ChannelScreen:', channel);
+  return (
+    <Channel channel={channel}>
+      <MessageList />
+      <MessageInput />
+    </Channel>
+  );
+};
+
 const ChatStack = () => {
-  const { clientIsReady } = useChatClient();
+  const {clientIsReady} = useChatClient();
+  const chatClient = StreamChat.getInstance(chatApiKey);
 
   if (!clientIsReady) {
     console.log(clientIsReady);
@@ -57,22 +103,25 @@ const ChatStack = () => {
 
   return (
     <OverlayProvider>
-      <Stack.Navigator>
-        <Stack.Screen name="ChatTab" component={ChatTab} />
-      </Stack.Navigator>
+      <Chat client={chatClient}>
+        <Stack.Navigator>
+          {/* <Stack.Screen name="ChatTab" component={ChatTab} /> */}
+          <Stack.Screen name="ChannelList" component={ChannelListScreen} />
+          <Stack.Screen name="ChannelScreen" component={ChannelScreen} />
+        </Stack.Navigator>
+      </Chat>
     </OverlayProvider>
   );
 };
 
 export default () => {
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={{flex: 1}}>
       <NavigationContainer>
         <Tab.Navigator
           screenOptions={{
             headerShown: false, // Hide the header
-          }}
-        >
+          }}>
           <Tab.Screen name="Home" component={HomeStack} />
           <Tab.Screen name="JoinedRooms" component={JoinedRoomsStack} />
           <Tab.Screen name="ChatTab" component={ChatStack} />
