@@ -4,14 +4,23 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {Text} from 'react-native';
 import {useChatClient} from './useChatClient';
-import {OverlayProvider} from 'stream-chat-expo';
+import {Chat, OverlayProvider} from 'stream-chat-expo';
 import ChatTab from './components/chat';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 const Stack = createStackNavigator();
 import Home from './screens/Home';
 import JoinedRooms from './components/joinedRoom';
-import ProfileTab from './components/profile';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {StreamChat} from 'stream-chat';
+import {chatApiKey} from './chatConfig';
+import {
+  ChannelList,
+  Channel,
+  MessageList,
+  MessageInput,
+} from 'stream-chat-expo';
+import {useAppContext} from './components/AppContext';
+import ProfileTab from './components/profile';
 
 const Tab = createBottomTabNavigator();
 
@@ -47,8 +56,46 @@ const JoinedRoomsStack = () => {
     </Stack.Navigator>
   );
 };
+
+const ChannelListScreen = props => {
+  return (
+    <ChannelList
+      onSelect={channel => {
+        console.log('Selected channel:', channel);
+        const {navigation} = props;
+        if (navigation) {
+          console.log('Navigation prop:', navigation);
+          navigation.navigate('ChannelScreen', {
+            channel,
+          });
+        } else {
+          console.warn('Navigation prop is missing.');
+        }
+      }}
+    />
+  );
+};
+
+const ChannelScreen = props => {
+  const {route} = props;
+  const {
+    params: {channel},
+  } = route;
+  // const {channel} = useAppContext();
+  //console log props
+  console.log('Props in ChannelScreen:', props);
+  console.log('Channel in ChannelScreen:', channel);
+  return (
+    <Channel channel={channel}>
+      <MessageList />
+      <MessageInput />
+    </Channel>
+  );
+};
+
 const ChatStack = () => {
   const {clientIsReady} = useChatClient();
+  const chatClient = StreamChat.getInstance(chatApiKey);
 
   if (!clientIsReady) {
     console.log(clientIsReady);
@@ -57,9 +104,13 @@ const ChatStack = () => {
 
   return (
     <OverlayProvider>
-      <Stack.Navigator>
-        <Stack.Screen name="ChatTab" component={ChatTab} />
-      </Stack.Navigator>
+      <Chat client={chatClient}>
+        <Stack.Navigator>
+          {/* <Stack.Screen name="ChatTab" component={ChatTab} /> */}
+          <Stack.Screen name="ChannelList" component={ChannelListScreen} />
+          <Stack.Screen name="ChannelScreen" component={ChannelScreen} />
+        </Stack.Navigator>
+      </Chat>
     </OverlayProvider>
   );
 };
