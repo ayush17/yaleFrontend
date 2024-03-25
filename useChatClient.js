@@ -22,7 +22,7 @@ export const useChatClient = () => {
   useEffect(() => {
     const setupClient = async () => {
       try {
-        chatClient.connectUser(user, chatUserToken);
+        chatClient.connectUser(user, chatClient.devToken(user.id));
         // console.log(
         //   "This is chat client",
         //   chatClient.connectUser(user, chatUserToken)
