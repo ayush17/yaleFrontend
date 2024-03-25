@@ -1,14 +1,40 @@
-import React from 'react';
-import {SafeAreaView, Text, View, ScrollView, StyleSheet} from 'react-native';
-import 'react-native-url-polyfill/auto';
-import {Input} from '@rneui/themed';
-import {FloatingAction} from 'react-native-floating-action';
-import data from '../components/data.json';
+import React, {useState} from 'react';
+import {SafeAreaView, View, ScrollView, StyleSheet} from 'react-native';
+import {Input} from '@rneui/base';
 import Card from '../components/card';
 
-function Home() {
+import {FloatingAction} from 'react-native-floating-action';
+import Logout from 'react-native-vector-icons/AntDesign';
+import Icon2 from 'react-native-vector-icons/Ionicons';
+
+import data from '../components/data.json';
+const logoutIcon = <Logout name="logout" size={15} color="white" />;
+const createIcon = <Icon2 name="create" size={15} color="white" />;
+
+import CreateRoomTab from '../components/createRoom';
+
+function Home({navigation}) {
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const profileId = 1;
-  const actions = [];
+  // State for form inputs
+
+  const actions = [
+    {
+      text: 'logout',
+      icon: logoutIcon,
+      name: 'logout',
+      position: 2,
+      color: 'green',
+    },
+    {
+      text: 'Create Room',
+      icon: createIcon,
+      name: 'createRoom',
+      position: 1,
+      color: 'green',
+    },
+  ];
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <ScrollView contentContainerStyle={{flexGrow: 1}}>
@@ -33,7 +59,7 @@ function Home() {
             <Card
               name={data.owner}
               description={data.description}
-              isProfileId={profileId == data.ownerId}
+              isProfileId={profileId === data.ownerId}
               topic={data.topic}
             />
           ))}
@@ -45,7 +71,13 @@ function Home() {
           buttonSize={72}
           color="green"
           onPressItem={name => {
-            console.log(`selected button: ${name}`);
+            if (name === 'createRoom') {
+              setIsBottomSheetOpen(true);
+              navigation.navigate('CreateRoom');
+              // bottomSheetRef?.current?.expand(); // Expand the bottom drawer
+            } else {
+              console.log(`selected ${name}`);
+            }
           }}
         />
       </View>
@@ -63,6 +95,23 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 16,
     right: 16,
+  },
+  contentContainer: {
+    flex: 1,
+    alignItems: 'center',
+    padding: 20,
+  },
+  input: {
+    width: '80%',
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+  },
+  error: {
+    color: 'red',
+    marginBottom: 10,
   },
 });
 

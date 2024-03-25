@@ -13,6 +13,8 @@ import JoinedRooms from './components/joinedRoom';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {StreamChat} from 'stream-chat';
 import {chatApiKey} from './chatConfig';
+import MapScreen from './components/MapScreen';
+
 import {
   ChannelList,
   Channel,
@@ -21,6 +23,7 @@ import {
 } from 'stream-chat-expo';
 import {useAppContext} from './components/AppContext';
 import ProfileTab from './components/profile';
+import CreateRoomTab from './components/createRoom';
 
 const Tab = createBottomTabNavigator();
 
@@ -32,6 +35,36 @@ const HomeStack = () => {
         component={Home}
         options={{
           title: 'Rooms',
+          headerStyle: {
+            backgroundColor: '#E8E8E8',
+          },
+          headerTintColor: 'black',
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="MapScreen"
+        component={MapScreen}
+        options={{
+          title: 'Map Screen',
+          headerStyle: {
+            backgroundColor: '#E8E8E8',
+          },
+          headerTintColor: 'black',
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="CreateRoom"
+        component={CreateRoomTab}
+        options={{
+          title: 'CreateRoom',
           headerStyle: {
             backgroundColor: '#E8E8E8',
           },
@@ -61,7 +94,6 @@ const ChannelListScreen = props => {
   return (
     <ChannelList
       onSelect={channel => {
-        console.log('Selected channel:', channel);
         const {navigation} = props;
         if (navigation) {
           console.log('Navigation prop:', navigation);

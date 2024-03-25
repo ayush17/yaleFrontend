@@ -19,7 +19,11 @@ const JoinedRooms = ({navigation}) => {
   return (
     <View>
       {roomsData.map(room => (
-        <RoomCard key={room.roomId} room={room} onCardPress={handleCardPress} />
+        <RoomCard
+          key={room.roomId}
+          room={room}
+          onCardPress={room => handleCardPress(room)}
+        />
       ))}
     </View>
   );
@@ -28,22 +32,7 @@ const JoinedRooms = ({navigation}) => {
 const JoinedRoomsStack = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen
-        name="JoinedRooms"
-        component={JoinedRooms}
-
-        // options={{
-        //   title: 'Joined Rooms',
-        //   headerStyle: {
-        //     backgroundColor: '#E8E8E8',
-        //   },
-        //   headerTintColor: 'black',
-        //   headerTitleAlign: 'center',
-        //   headerTitleStyle: {
-        //     fontWeight: 'bold',
-        //   },
-        // }}
-      />
+      <Stack.Screen name="JoinedRooms" component={JoinedRooms} />
       <Stack.Screen
         name="MapScreen"
         component={MapScreen}
