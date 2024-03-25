@@ -29,6 +29,7 @@ const CreateRoomTab = ({navigation, data, route}) => {
   const [address, setAddress] = useState('');
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState(new Date());
+  const [participantsCount, setParticipantsCount] = useState(1);
   useEffect(() => {
     if (route?.params?.data) {
       setAddress(route?.params?.data);
@@ -36,6 +37,13 @@ const CreateRoomTab = ({navigation, data, route}) => {
       setDestination(route?.params?.destinationLocation);
     }
   }, [route.params]);
+  const incrementParticipantCount = () => {
+    setParticipantsCount(prevCount => prevCount + 1);
+  };
+
+  const decrementParticipantCount = () => {
+    setParticipantsCount(prevCount => Math.max(1, prevCount - 1)); // Ensure count never goes below 1
+  };
   const Submit = async data => {
     try {
       const response = await fetch(
@@ -51,7 +59,7 @@ const CreateRoomTab = ({navigation, data, route}) => {
               ownerId: profileId,
               owner: 'Pranshu',
               topic: data.topic,
-              maxCount: 10,
+              maxCount: participantsCount,
               address: address,
               participants: [
                 {userId: 101, username: 'Ayush'},
@@ -139,6 +147,20 @@ const CreateRoomTab = ({navigation, data, route}) => {
             <Text style={styles.locationButtonText}>Select Location</Text>
           </TouchableOpacity>
         </View>
+        <View style={styles.participantsContainer}>
+          <Text style={styles.participantsCount}>Max Count:</Text>
+          <TouchableOpacity
+            onPress={incrementParticipantCount}
+            style={styles.participantsButton}>
+            <MaterialIcons name="add" size={24} color="black" />
+          </TouchableOpacity>
+          <Text style={styles.participantsCount}>{participantsCount}</Text>
+          <TouchableOpacity
+            onPress={decrementParticipantCount}
+            style={styles.participantsButton}>
+            <MaterialIcons name="remove" size={24} color="black" />
+          </TouchableOpacity>
+        </View>
 
         <TouchableOpacity
           onPress={showDatePickerModal}
@@ -222,6 +244,22 @@ const styles = StyleSheet.create({
   },
   datePickerText: {
     marginLeft: 10,
+  },
+  participantsContainer: {
+    flexDirection: 'row',
+
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  participantsButton: {
+    backgroundColor: 'lightgrey',
+    borderRadius: 20,
+    padding: 10,
+    marginHorizontal: 5,
+  },
+  participantsCount: {
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   error: {
     color: 'red',
