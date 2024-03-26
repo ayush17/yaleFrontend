@@ -1,5 +1,3 @@
-// useChatClient.js
-
 import {useEffect, useState} from 'react';
 import {StreamChat} from 'stream-chat';
 import {
@@ -18,38 +16,31 @@ const chatClient = StreamChat.getInstance(chatApiKey);
 
 export const useChatClient = () => {
   const [clientIsReady, setClientIsReady] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [connectionError, setConnectionError] = useState(null);
 
   useEffect(() => {
     const setupClient = async () => {
       try {
-        chatClient.connectUser(user, chatClient.devToken(user.id));
-        // console.log(
-        //   "This is chat client",
-        //   chatClient.connectUser(user, chatUserToken)
-        // );
+        setIsLoading(true); // Set the loading state to true before connecting the user
+        setClientIsReady(false); // Reset the clientIsReady state to false
+        await chatClient.connectUser(user, chatClient.devToken(user.id));
         setClientIsReady(true);
-
-        // connectUser is an async function. So you can choose to await for it or not depending on your use case (e.g. to show custom loading indicator)
-        // But in case you need the chat to load from offline storage first then you should render chat components
-        // immediately after calling `connectUser()`.
-        // BUT ITS NECESSARY TO CALL connectUser FIRST IN ANY CASE.
+        setConnectionError(null); // Clear any previous connection error
       } catch (error) {
-        if (error instanceof Error) {
-          console.error(
-            `An error occurred while connecting the user: ${error.message}`,
-          );
-        }
+        setConnectionError(error); // Set the connection error
+        console.error(
+          `An error occurred while connecting the user: ${error.message}`,
+        );
+      } finally {
+        setIsLoading(false); // Set the loading state to false after the connection attempt
       }
     };
 
-    // If the chat client has a value in the field `userID`, a user is already connected
-    // and we can skip trying to connect the user again.
     if (!chatClient.userID) {
       setupClient();
     }
   }, []);
 
-  return {
-    clientIsReady,
-  };
+  return {clientIsReady, isLoading, connectionError};
 };
