@@ -1,35 +1,18 @@
-import React from 'react';
+import React, {useState} from 'react';
 import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import {Text} from 'react-native';
-import {useChatClient} from './useChatClient';
-import {Chat, OverlayProvider} from 'stream-chat-expo';
-import ChatTab from './components/chat';
+import ChatStack from './components/chat';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 const Stack = createStackNavigator();
 import Home from './screens/Home';
 import JoinedRooms from './components/joinedRoom';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {StreamChat} from 'stream-chat';
-import {chatApiKey, chatUserId, chatUserName} from './chatConfig';
+import {chatUserName} from './chatConfig';
 import MapScreen from './components/MapScreen';
-import {Button, View} from 'react-native';
-import {
-  createNewUser,
-  createNewChannel,
-  addUserToChannel,
-} from './chatOperations';
-
-import {
-  ChannelList,
-  Channel,
-  MessageList,
-  MessageInput,
-} from 'stream-chat-expo';
-import {useAppContext} from './components/AppContext';
 import ProfileTab from './components/profile';
 import CreateRoomTab from './components/createRoom';
+import Login from './screens/Authentication';
 
 const Tab = createBottomTabNavigator();
 
@@ -51,6 +34,7 @@ const HomeStack = () => {
           },
         }}
       />
+
       <Stack.Screen
         name="MapScreen"
         component={MapScreen}
@@ -96,100 +80,6 @@ const JoinedRoomsStack = () => {
   );
 };
 
-const ChannelListScreen = props => {
-  const filters = {
-    members: {$in: [chatUserId]},
-  };
-
-  return (
-    <ChannelList
-      filters={filters}
-      onSelect={channel => {
-        const {navigation} = props;
-        if (navigation) {
-          console.log('Navigation prop:', navigation);
-          navigation.navigate('ChannelScreen', {
-            channel,
-          });
-        } else {
-          console.warn('Navigation prop is missing.');
-        }
-      }}
-    />
-  );
-};
-
-const ChannelScreen = props => {
-  const {route} = props;
-  const {
-    params: {channel},
-  } = route;
-  // const {channel} = useAppContext();
-  //console log props
-  console.log('Props in ChannelScreen:', props);
-  console.log('Channel in ChannelScreen:', channel);
-  return (
-    <Channel channel={channel}>
-      <MessageList />
-      <MessageInput />
-    </Channel>
-  );
-};
-
-const ChatStack = () => {
-  const {clientIsReady, isLoading, connectionError} = useChatClient();
-  const chatClient = StreamChat.getInstance(chatApiKey);
-
-  if (isLoading) {
-    return <Text>Loading chat...</Text>;
-  }
-
-  if (connectionError) {
-    console.error('Connection error:', connectionError);
-    return <Text>Failed to connect to chat</Text>;
-  }
-
-  if (!clientIsReady) {
-    console.log(clientIsReady);
-    return <Text>Failed to load chat</Text>;
-  }
-
-  const handleCreateNewUser = () => {
-    // Call the createNewUser function with the desired userId and userName
-    createNewUser('jd11', 'John Doe');
-  };
-
-  const handleCreateNewChannel = () => {
-    // Call the createNewChannel function with the desired channelName and members
-    createNewChannel('personal', 'Personal Channel', ['jd11', 'user2']);
-  };
-
-  const handleAddUserToChannel = () => {
-    // Call the addUserToChannel function with the desired channelId and userId
-    addUserToChannel('personal', 'user1');
-  };
-
-  return (
-    <OverlayProvider>
-      <Chat client={chatClient}>
-        <Stack.Navigator>
-          {/* Your existing screens */}
-          <Stack.Screen name="ChannelList" component={ChannelListScreen} />
-          <Stack.Screen name="ChannelScreen" component={ChannelScreen} />
-        </Stack.Navigator>
-        <View>
-          <Button title="Create New User" onPress={handleCreateNewUser} />
-          <Button title="Create New Channel" onPress={handleCreateNewChannel} />
-          <Button
-            title="Add User to Channel"
-            onPress={handleAddUserToChannel}
-          />
-        </View>
-      </Chat>
-    </OverlayProvider>
-  );
-};
-
 const ProfileStack = () => {
   console.log('ChatUserName:', chatUserName);
   return (
@@ -205,6 +95,21 @@ const ProfileStack = () => {
 };
 
 export default () => {
+  const [isLogin, setIsLogin] = useState(false);
+  const [loginOrSignUP, setloginOrSignUP] = useState('login');
+  const setLogin = prevState => {
+    setIsLogin(prevState);
+  };
+  if (!isLogin) {
+    return (
+      <Login
+        isLogin={isLogin}
+        loginOrSignUP={loginOrSignUP}
+        setloginOrSignUP={setloginOrSignUP}
+        setLogin={setLogin}
+      />
+    );
+  }
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <NavigationContainer>
