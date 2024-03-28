@@ -11,7 +11,7 @@ import {Text, View, Image, TouchableOpacity} from 'react-native';
 import {Avatar} from '@rneui/themed';
 import 'react-native-url-polyfill/auto';
 
-function Card({name, isProfileId, description, topic}): React.JSX.Element {
+function Card({owner, isProfileId, description, topic, members, maxCount, location}): React.JSX.Element {
   const handlePress = () => {
     // Your button press logic here
     console.log('Button pressed');
@@ -39,7 +39,7 @@ function Card({name, isProfileId, description, topic}): React.JSX.Element {
         />
       </View>
       <View style={{marginLeft: 25}}>
-        <Text style={{fontSize: 20}}>{name}'s Room</Text>
+        <Text style={{fontSize: 20}}>{owner}'s Room</Text>
         <Text style={{width: '60%', marginTop: 1}}>{description}</Text>
         <View
           style={{
@@ -49,7 +49,7 @@ function Card({name, isProfileId, description, topic}): React.JSX.Element {
             marginTop: 5,
           }}>
           <Image source={require('../icons/location.jpg')} />
-          <Text style={{marginLeft: 7}}>Umassd Library</Text>
+          <Text style={{marginLeft: 7}}>{location}</Text>
         </View>
         <View
           style={{
@@ -58,7 +58,7 @@ function Card({name, isProfileId, description, topic}): React.JSX.Element {
             alignItems: 'center',
           }}>
           <Image source={require('../icons/Group.png')} />
-          <Text style={{marginLeft: 7}}>1/8</Text>
+          <Text style={{marginLeft: 7}}>{members}/{maxCount}</Text>
         </View>
         <View
           style={{
