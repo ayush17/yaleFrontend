@@ -46,19 +46,19 @@ const ChatStack = ({navigation}) => {
         return response.json();
       })
       .then(data => {
-        for (let i = 0; i < data.length; i++) {
-          const obj = data[i];
-          let arrayOfUserIds = [];
-          for (let participant in obj.participants) {
-            const userId = obj.participants[participant].userId;
-            const userName = obj.participants[participant].userName;
-            handleCreateNewUser(`${userId}`, userName);
+        // for (let i = 0; i < data.length; i++) {
+        //   const obj = data[i];
+        //   let arrayOfUserIds = [];
+        //   for (let participant in obj.participants) {
+        //     const userId = obj.participants[participant].userId;
+        //     const userName = obj.participants[participant].userName;
+        //     handleCreateNewUser(`${userId}`, userName);
 
-            arrayOfUserIds.push(`${userId}`);
-          }
-          handleCreateNewChannel(obj.topic, arrayOfUserIds);
-          addUserToChannel(obj.topic, 'user1');
-        }
+        //     arrayOfUserIds.push(`${userId}`);
+        //   }
+        //   handleCreateNewChannel(obj.topic, arrayOfUserIds);
+        //   addUserToChannel(obj.topic, 'user1');
+        // }
         // Handle the fetched data here
       })
       .catch(error => {

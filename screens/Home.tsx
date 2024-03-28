@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {SafeAreaView, View, ScrollView, StyleSheet} from 'react-native';
 import {Input} from '@rneui/base';
 import Card from '../components/card';
@@ -11,12 +11,29 @@ import data from '../components/data.json';
 const logoutIcon = <Logout name="logout" size={15} color="white" />;
 const createIcon = <Icon2 name="create" size={15} color="white" />;
 
+import { Room } from '../model/room';
+
 import CreateRoomTab from '../components/createRoom';
 
 function Home({navigation}) {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const profileId = 1;
+  const [rooms, setRooms] = useState([]); 
   // State for form inputs
+
+useEffect(() => {
+    const fetchRooms = async () => {
+      try {
+        const response = await fetch('https://yalehack-production.up.railway.app/api/rooms');
+        const data = await response.json();
+        setRooms(data);
+      } catch (error) {
+        console.error('Error fetching rooms:', error);
+      }
+    };
+
+    fetchRooms();
+  }, []);
 
   const actions = [
     {
@@ -55,14 +72,24 @@ function Home({navigation}) {
           }}
         />
         <View style={styles.cardsContainer}>
-          {data.map(data => (
-            <Card
-              name={data.owner}
-              description={data.description}
-              isProfileId={profileId === data.ownerId}
-              topic={data.topic}
+          {rooms.map((data) => {
+            const room = new Room(data); // Create a Room instance
+            console.log(room.participants);
+            
+            return (
+              <Card
+                key={room.roomId}
+                owner={data.owner}
+                description={data.description}
+                isProfileId={profileId === data.ownerId}
+                topic={data.topic}
+                maxCount={data.maxCount}
+                members="1" //need to map
+                location={data.destinationLocation.latitude}
+              
             />
-          ))}
+          );
+            })}
         </View>
       </ScrollView>
       <View style={styles.fabContainer}>

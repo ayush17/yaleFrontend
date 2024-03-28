@@ -17,13 +17,12 @@ const Login = ({isLogin, setLogin, loginOrSignUP, setloginOrSignUP}) => {
   const handleLogin = () => {
     // Create a payload object with email and password
     const payload = {
-      userId: userId,
       email: email,
       password: password,
-      role: 'member',
     };
-    // Make a POST request
+    // Make a GET request
     fetch('https://yalehack-production.up.railway.app/api/users/login', {
+    // fetch('http://localhost:3000/api/users/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -32,16 +31,16 @@ const Login = ({isLogin, setLogin, loginOrSignUP, setloginOrSignUP}) => {
     })
       .then(response => {
         if (!response.ok) {
-          throw new Error('Failed to sign up');
+          throw new Error('Failed to log in: ' + response.text);
         }
         return response.json();
       })
       .then(data => {
-        console.log('Signup successful:', data);
+        console.log('Login successful:', data);
         // Handle successful signup response here
       })
       .catch(error => {
-        console.error('Error signing up:', error);
+        console.error('Login Failed:', error);
         // Handle error, e.g., display an error message to the user
       });
     setLogin(!isLogin);
