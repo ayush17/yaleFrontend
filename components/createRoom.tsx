@@ -12,7 +12,13 @@ import {Button} from '@rneui/themed';
 import BottomSheet, {BottomSheetView} from '@gorhom/bottom-sheet';
 import {useForm, Controller} from 'react-hook-form';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import {
+  createNewUser,
+  createNewChannel,
+  addUserToChannel,
+} from '../chatOperations';
 import {MaterialIcons} from '@expo/vector-icons';
+
 const profileId = 4;
 const CreateRoomTab = ({navigation, data, route}) => {
   const {
@@ -29,12 +35,19 @@ const CreateRoomTab = ({navigation, data, route}) => {
   const [address, setAddress] = useState('');
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState(new Date());
+  const [userId, setUserId] = useState('');
+  const [userName, setUsername] = useState('');
   const [participantsCount, setParticipantsCount] = useState(1);
   useEffect(() => {
+    console.log('Inside create Room tab', route.params);
     if (route?.params?.data) {
       setAddress(route?.params?.data);
       setOrigin(route?.params?.currentLocation);
       setDestination(route?.params?.destinationLocation);
+    }
+    if (route?.params?.userId) {
+      setUserId(route?.params?.userId);
+      setUsername(route?.params?.userName);
     }
   }, [route.params]);
   const incrementParticipantCount = () => {
@@ -56,8 +69,8 @@ const CreateRoomTab = ({navigation, data, route}) => {
           body: JSON.stringify({
             room: {
               roomId: 5,
-              ownerId: profileId,
-              owner: 'Pranshu',
+              ownerId: userId,
+              owner: userName,
               topic: data.topic,
               maxCount: participantsCount,
               address: address,
@@ -80,6 +93,8 @@ const CreateRoomTab = ({navigation, data, route}) => {
       }
 
       bottomSheetRef?.current?.close();
+      await createNewChannel(data.topic, data.topic);
+      await addUserToChannel(data.topic, userId);
       navigation.navigate('Home');
     } catch (error) {
       console.error('Error:', error.message);

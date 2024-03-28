@@ -39,7 +39,7 @@ export const createNewChannel = async (channelid, channelName, members) => {
 
     const channel = chatClient.channel('messaging', channelid, channelData);
     const response = await channel.create();
-    // console.log('Channel created:', response);
+    console.log('Channel created:', response);
     // Handle the successful creation of the channel
   } catch (error) {
     console.error('Error creating channel:', error);

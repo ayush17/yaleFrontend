@@ -64,13 +64,14 @@ function InputAutocomplete({
   );
 }
 
-export default function MapScreen({navigation}) {
+export default function MapScreen({navigation, route}) {
   const [origin, setOrigin] = useState<LatLng | null>();
   const [destination, setDestination] = useState<LatLng | null>();
   const [showDirections, setShowDirections] = useState(false);
   const [address, setAddress] = useState('');
   const [distance, setDistance] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [from, setFrom] = useState('');
   const mapRef = useRef<MapView>(null);
 
   useEffect(() => {
@@ -83,6 +84,10 @@ export default function MapScreen({navigation}) {
       };
       setOrigin(position);
       moveTo(position);
+      if (route && route.params && route.params.from == 'home-screen') {
+        setFrom(route.params.from);
+        setDestination(route.params.destinationLocation);
+      }
     })();
   }, []);
   const moveTo = async (position: LatLng) => {
@@ -164,15 +169,17 @@ export default function MapScreen({navigation}) {
         )}
       </MapView>
       <View style={styles.searchContainer}>
-        <InputAutocomplete
-          label="Choose Place"
-          onPlaceSelected={details => {
-            const adr =
-              `${details?.name}` + ' ' + `${details?.formatted_address}`;
-            setAddress(adr);
-            onPlaceSelected(details, 'destination');
-          }}
-        />
+        {from != 'home-screen' ? (
+          <InputAutocomplete
+            label="Choose Place"
+            onPlaceSelected={details => {
+              const adr =
+                `${details?.name}` + ' ' + `${details?.formatted_address}`;
+              setAddress(adr);
+              onPlaceSelected(details, 'destination');
+            }}
+          />
+        ) : null}
         <TouchableOpacity style={styles.button} onPress={traceRoute}>
           <Text style={styles.buttonText}>Trace route</Text>
         </TouchableOpacity>
@@ -186,15 +193,17 @@ export default function MapScreen({navigation}) {
           </View>
         ) : null}
       </View>
-      <View style={styles.fabContainer}>
-        <FloatingAction
-          floatingIcon={<Done name="done" size={15} color="white" />}
-          actions={actions}
-          buttonSize={62}
-          onPressMain={goBackWithData}
-          color="black"
-        />
-      </View>
+      {from != 'home-screen' ? (
+        <View style={styles.fabContainer}>
+          <FloatingAction
+            floatingIcon={<Done name="done" size={15} color="white" />}
+            actions={actions}
+            buttonSize={62}
+            onPressMain={goBackWithData}
+            color="black"
+          />
+        </View>
+      ) : null}
     </View>
   );
 }

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {SafeAreaView, View, ScrollView, StyleSheet} from 'react-native';
 import {Input} from '@rneui/base';
 import Card from '../components/card';
-
+import {useFocusEffect} from '@react-navigation/native';
 import {FloatingAction} from 'react-native-floating-action';
 import Logout from 'react-native-vector-icons/AntDesign';
 import Icon2 from 'react-native-vector-icons/Ionicons';
@@ -11,29 +11,35 @@ import data from '../components/data.json';
 const logoutIcon = <Logout name="logout" size={15} color="white" />;
 const createIcon = <Icon2 name="create" size={15} color="white" />;
 
-import { Room } from '../model/room';
+import {Room} from '../model/room';
 
 import CreateRoomTab from '../components/createRoom';
 
-function Home({navigation}) {
+function Home({navigation, route, userId, userName}) {
+  console.log('Inside home screen userid', userId);
+  console.log('Inside home screen userName', userName);
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const profileId = 1;
-  const [rooms, setRooms] = useState([]); 
+  const [rooms, setRooms] = useState([]);
   // State for form inputs
 
-useEffect(() => {
-    const fetchRooms = async () => {
-      try {
-        const response = await fetch('https://yalehack-production.up.railway.app/api/rooms');
-        const data = await response.json();
-        setRooms(data);
-      } catch (error) {
-        console.error('Error fetching rooms:', error);
-      }
-    };
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchRooms = async () => {
+        try {
+          const response = await fetch(
+            'https://yalehack-production.up.railway.app/api/rooms',
+          );
+          const data = await response.json();
+          setRooms(data);
+        } catch (error) {
+          console.error('Error fetching rooms:', error);
+        }
+      };
 
-    fetchRooms();
-  }, []);
+      fetchRooms();
+    }, []),
+  );
 
   const actions = [
     {
@@ -72,24 +78,24 @@ useEffect(() => {
           }}
         />
         <View style={styles.cardsContainer}>
-          {rooms.map((data) => {
+          {rooms.map(data => {
             const room = new Room(data); // Create a Room instance
-            console.log(room.participants);
-            
             return (
               <Card
                 key={room.roomId}
                 owner={data.owner}
+                address={data.address}
                 description={data.description}
                 isProfileId={profileId === data.ownerId}
                 topic={data.topic}
                 maxCount={data.maxCount}
                 members="1" //need to map
-                location={data.destinationLocation.latitude}
-              
-            />
-          );
-            })}
+                currentlocation={data.currentlocation}
+                destinationLocation={data.destinationLocation}
+                navigation={navigation}
+              />
+            );
+          })}
         </View>
       </ScrollView>
       <View style={styles.fabContainer}>
@@ -100,7 +106,10 @@ useEffect(() => {
           onPressItem={name => {
             if (name === 'createRoom') {
               setIsBottomSheetOpen(true);
-              navigation.navigate('CreateRoom');
+              navigation.navigate('CreateRoom', {
+                userId: userId,
+                userName: userName,
+              });
               // bottomSheetRef?.current?.expand(); // Expand the bottom drawer
             } else {
               console.log(`selected ${name}`);

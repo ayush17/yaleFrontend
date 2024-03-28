@@ -7,13 +7,29 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-
-const Login = ({isLogin, setLogin, loginOrSignUP, setloginOrSignUP}) => {
+import {
+  createNewUser,
+  createNewChannel,
+  addUserToChannel,
+} from '../chatOperations';
+import {useChatClient} from '../useChatClient';
+import {StreamChat} from 'stream-chat';
+import {chatApiKey, chatUserId, chatUserName} from '../chatConfig';
+const Login = ({
+  isLogin,
+  setLogin,
+  loginOrSignUP,
+  setloginOrSignUP,
+  setuserid,
+  setusername,
+}) => {
   const [email, setEmail] = useState('');
   const [userName, setuserName] = useState('');
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
+  const {clientIsReady, isLoading, connectionError} = useChatClient();
 
+  const chatClient = StreamChat.getInstance(chatApiKey);
   const handleLogin = () => {
     // Create a payload object with email and password
     const payload = {
@@ -22,7 +38,7 @@ const Login = ({isLogin, setLogin, loginOrSignUP, setloginOrSignUP}) => {
     };
     // Make a GET request
     fetch('https://yalehack-production.up.railway.app/api/users/login', {
-    // fetch('http://localhost:3000/api/users/login', {
+      // fetch('http://localhost:3000/api/users/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -37,6 +53,7 @@ const Login = ({isLogin, setLogin, loginOrSignUP, setloginOrSignUP}) => {
       })
       .then(data => {
         console.log('Login successful:', data);
+
         // Handle successful signup response here
       })
       .catch(error => {
@@ -74,6 +91,9 @@ const Login = ({isLogin, setLogin, loginOrSignUP, setloginOrSignUP}) => {
       })
       .then(data => {
         console.log('Signup successful:', data);
+        setuserid(data.userId);
+        setusername(data.name);
+        createNewUser(data.userId, data.name);
         // Handle successful signup response here
       })
       .catch(error => {

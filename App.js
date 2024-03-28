@@ -16,12 +16,15 @@ import Login from './screens/Authentication';
 
 const Tab = createBottomTabNavigator();
 
-const HomeStack = () => {
+const HomeStack = ({userid, username}) => {
   return (
     <Stack.Navigator>
       <Stack.Screen
         name="Home"
-        component={Home}
+        component={props => (
+          <Home {...props} userId={userid} userName={username} />
+        )}
+        // initialParams={{userId: userid, username: username}}
         options={{
           title: 'Rooms',
           headerStyle: {
@@ -96,10 +99,13 @@ const ProfileStack = () => {
 
 export default () => {
   const [isLogin, setIsLogin] = useState(false);
+  const [userid, setuserid] = useState('');
+  const [username, setusername] = useState('');
   const [loginOrSignUP, setloginOrSignUP] = useState('login');
   const setLogin = prevState => {
     setIsLogin(prevState);
   };
+
   if (!isLogin) {
     return (
       <Login
@@ -107,21 +113,35 @@ export default () => {
         loginOrSignUP={loginOrSignUP}
         setloginOrSignUP={setloginOrSignUP}
         setLogin={setLogin}
+        setuserid={setuserid}
+        setusername={setusername}
       />
     );
   }
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <NavigationContainer>
-        <Tab.Navigator
-          screenOptions={{
-            headerShown: false, // Hide the header
-          }}>
-          <Tab.Screen name="Home" component={HomeStack} />
-          <Tab.Screen name="JoinedRooms" component={JoinedRoomsStack} />
-          <Tab.Screen name="ChatTab" component={ChatStack} />
-          <Tab.Screen name="Profile" component={ProfileStack} />
-        </Tab.Navigator>
+        {isLogin && ( // Render Tab.Navigator only if user is logged in
+          <Tab.Navigator
+            screenOptions={{
+              headerShown: false, // Hide the header
+            }}>
+            <Tab.Screen
+              name="Home"
+              component={() => {
+                return <HomeStack userid={userid} username={username} />;
+              }}
+            />
+            <Tab.Screen name="JoinedRooms" component={JoinedRoomsStack} />
+            <Tab.Screen
+              name="ChatTab"
+              component={() => {
+                return <ChatStack userid={userid} username={username} />;
+              }}
+            />
+            <Tab.Screen name="Profile" component={ProfileStack} />
+          </Tab.Navigator>
+        )}
       </NavigationContainer>
     </GestureHandlerRootView>
   );

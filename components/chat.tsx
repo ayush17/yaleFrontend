@@ -25,7 +25,7 @@ import {
 
 const Stack = createStackNavigator();
 
-const ChatStack = ({navigation}) => {
+const ChatStack = ({navigation, userid, username}) => {
   const {clientIsReady, isLoading, connectionError} = useChatClient();
   const chatClient = StreamChat.getInstance(chatApiKey);
   const handleCreateNewUser = (userId, userName) => {
@@ -33,11 +33,11 @@ const ChatStack = ({navigation}) => {
     createNewUser(userId, userName);
   };
   const handleCreateNewChannel = (channelName, participants) => {
-    console.log('this is participants', participants);
     // Call the createNewChannel function with the desired channelName and members
     createNewChannel(channelName, channelName, participants);
   };
   useEffect(() => {
+    console.log('inside chat', userid, username);
     fetch('https://yalehack-production.up.railway.app/api/rooms')
       .then(response => {
         if (!response.ok) {
@@ -53,7 +53,6 @@ const ChatStack = ({navigation}) => {
         //     const userId = obj.participants[participant].userId;
         //     const userName = obj.participants[participant].userName;
         //     handleCreateNewUser(`${userId}`, userName);
-
         //     arrayOfUserIds.push(`${userId}`);
         //   }
         //   handleCreateNewChannel(obj.topic, arrayOfUserIds);
@@ -72,7 +71,7 @@ const ChatStack = ({navigation}) => {
   }
   const ChannelListScreen = props => {
     const filters = {
-      members: {$in: [chatUserId]},
+      members: {$in: ['user2']},
     };
 
     return (
