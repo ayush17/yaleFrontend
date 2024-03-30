@@ -15,19 +15,28 @@ import {
 import {useChatClient} from '../useChatClient';
 import {StreamChat} from 'stream-chat';
 import {chatApiKey, chatUserId, chatUserName} from '../chatConfig';
+import { set } from 'react-hook-form';
 const Login = ({
+  // isLogin,
+  // setLogin,
+  // loginOrSignUP,
+  // setloginOrSignUP,
+  // setuserid,
+  // setusername,
+
   isLogin,
-  setLogin,
+  userId,
+  userName,
   loginOrSignUP,
   setloginOrSignUP,
-  setuserid,
-  setusername,
+  setLogin,
+  setuserId,
+  setuserName
 }) => {
   const [email, setEmail] = useState('');
-  const [userName, setuserName] = useState('');
-  const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
-  const {clientIsReady, isLoading, connectionError} = useChatClient();
+  useChatClient("user1","Pranshu");
+
 
   const chatClient = StreamChat.getInstance(chatApiKey);
   const handleLogin = () => {
@@ -36,7 +45,7 @@ const Login = ({
       email: email,
       password: password,
     };
-    // Make a GET request
+    // Make a POST request
     fetch('https://yalehack-production.up.railway.app/api/users/login', {
       // fetch('http://localhost:3000/api/users/login', {
       method: 'POST',
@@ -54,13 +63,18 @@ const Login = ({
       .then(data => {
         console.log('Login successful:', data);
 
+        setuserId(data[0].userId);
+        console.log('Setting userID state as  ', data[0].userId);
+        setuserName(data[0].name);
+        console.log('Setting userName state as  ', data[0].name);
+        setLogin(!isLogin);
+
         // Handle successful signup response here
       })
       .catch(error => {
         console.error('Login Failed:', error);
         // Handle error, e.g., display an error message to the user
       });
-    setLogin(!isLogin);
   };
 
   const handleSignup = () => {
@@ -91,8 +105,8 @@ const Login = ({
       })
       .then(data => {
         console.log('Signup successful:', data);
-        setuserid(data.userId);
-        setusername(data.name);
+        setuserId(data.userId);
+        setuserName(data.name);
         createNewUser(data.userId, data.name);
         // Handle successful signup response here
       })
@@ -112,7 +126,7 @@ const Login = ({
           style={styles.input}
           placeholder="userId"
           value={userId}
-          onChangeText={setUserId}
+          onChangeText={setuserId}
           keyboardType="email-address"
           autoCapitalize="none"
         />

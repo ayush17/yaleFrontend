@@ -28,14 +28,14 @@ const Stack = createStackNavigator();
 const ChatStack = ({navigation, userid, username}) => {
   const {clientIsReady, isLoading, connectionError} = useChatClient();
   const chatClient = StreamChat.getInstance(chatApiKey);
-  const handleCreateNewUser = (userId, userName) => {
-    // Call the createNewUser function with the desired userId and userName
-    createNewUser(userId, userName);
-  };
-  const handleCreateNewChannel = (channelName, participants) => {
-    // Call the createNewChannel function with the desired channelName and members
-    createNewChannel(channelName, channelName, participants);
-  };
+  // const handleCreateNewUser = (userId, userName) => {
+  //   // Call the createNewUser function with the desired userId and userName
+  //   createNewUser(userId, userName);
+  // };
+  // const handleCreateNewChannel = (channelName, participants) => {
+  //   // Call the createNewChannel function with the desired channelName and members
+  //   createNewChannel(channelName, channelName, participants);
+  // };
   useEffect(() => {
     console.log('inside chat', userid, username);
     fetch('https://yalehack-production.up.railway.app/api/rooms')
@@ -70,8 +70,9 @@ const ChatStack = ({navigation, userid, username}) => {
     return <Text>Loading chat...</Text>;
   }
   const ChannelListScreen = props => {
+    console.log('Props in ChannelListScreen:', props);
     const filters = {
-      members: {$in: ['user2']},
+      members: {$in: [userid]},
     };
 
     return (

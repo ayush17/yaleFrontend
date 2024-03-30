@@ -11,6 +11,10 @@ import data from '../components/data.json';
 const logoutIcon = <Logout name="logout" size={15} color="white" />;
 const createIcon = <Icon2 name="create" size={15} color="white" />;
 
+import {useChatClient} from '../useChatClient';
+import {StreamChat} from 'stream-chat';
+import {chatApiKey, chatUserId, chatUserName} from '../chatConfig';
+
 import {Room} from '../model/room';
 
 import CreateRoomTab from '../components/createRoom';
@@ -22,6 +26,13 @@ function Home({navigation, route, userId, userName}) {
   const profileId = 1;
   const [rooms, setRooms] = useState([]);
   // State for form inputs
+
+   const chatClient = StreamChat.getInstance(chatApiKey);
+    // chatClient.disconnectUser();
+    // console.log('Disconnected user');
+    useChatClient(userId, userName);
+    console.log('Connected user inside home', userId, userName);
+        
 
   useFocusEffect(
     React.useCallback(() => {
@@ -86,7 +97,7 @@ function Home({navigation, route, userId, userName}) {
                 owner={data.owner}
                 address={data.address}
                 description={data.description}
-                isProfileId={profileId === data.ownerId}
+                isProfileId={userId === data.ownerId}
                 topic={data.topic}
                 maxCount={data.maxCount}
                 members="1" //need to map
@@ -107,6 +118,8 @@ function Home({navigation, route, userId, userName}) {
           onPressItem={name => {
             if (name === 'createRoom') {
               setIsBottomSheetOpen(true);
+              console.log('createing room from user id', userId);
+              
               navigation.navigate('CreateRoom', {
                 userId: userId,
                 userName: userName,

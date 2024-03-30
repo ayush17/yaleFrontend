@@ -7,24 +7,28 @@ import {
   chatUserToken,
 } from './chatConfig';
 
-const user = {
-  id: chatUserId,
-  name: chatUserName,
-};
-
 const chatClient = StreamChat.getInstance(chatApiKey);
 
-export const useChatClient = () => {
+export const useChatClient = (userId, userName) => {
   const [clientIsReady, setClientIsReady] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [connectionError, setConnectionError] = useState(null);
+
+  const user = {
+    id: userId,
+    name: userName,
+  };
 
   useEffect(() => {
     const setupClient = async () => {
       try {
         setIsLoading(true); // Set the loading state to true before connecting the user
         setClientIsReady(false); // Reset the clientIsReady state to false
+        console.log('Before connectUser');
         await chatClient.connectUser(user, chatClient.devToken(user.id));
+        console.log('After connectUser');
+        //check who is connected
+        console.log('chatClient:', chatClient._user);
         setClientIsReady(true);
         setConnectionError(null); // Clear any previous connection error
       } catch (error) {
