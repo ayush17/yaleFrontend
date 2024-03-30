@@ -6,7 +6,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import {FloatingAction} from 'react-native-floating-action';
 import Logout from 'react-native-vector-icons/AntDesign';
 import Icon2 from 'react-native-vector-icons/Ionicons';
-
+import {LinearGradient} from 'expo-linear-gradient';
 import data from '../components/data.json';
 const logoutIcon = <Logout name="logout" size={15} color="white" />;
 const createIcon = <Icon2 name="create" size={15} color="white" />;
@@ -27,12 +27,11 @@ function Home({navigation, route, userId, userName}) {
   const [rooms, setRooms] = useState([]);
   // State for form inputs
 
-   const chatClient = StreamChat.getInstance(chatApiKey);
-    // chatClient.disconnectUser();
-    // console.log('Disconnected user');
-    useChatClient(userId, userName);
-    console.log('Connected user inside home', userId, userName);
-        
+  const chatClient = StreamChat.getInstance(chatApiKey);
+  // chatClient.disconnectUser();
+  // console.log('Disconnected user');
+  useChatClient(userId, userName);
+  console.log('Connected user inside home', userId, userName);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -71,66 +70,67 @@ function Home({navigation, route, userId, userName}) {
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      <ScrollView contentContainerStyle={{flexGrow: 1}}>
-        <Input
-          placeholder="Search"
-          inputContainerStyle={{
-            backgroundColor: '#E8E8E8',
-            width: '100%',
-            borderBottomWidth: 0,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-          inputStyle={{
-            padding: 20,
-            backgroundColor: 'white',
-            borderRadius: 30,
-            borderBottomWidth: 0,
-          }}
-        />
-        <View style={styles.cardsContainer}>
-          {rooms.map(data => {
-            const room = new Room(data); // Create a Room instance
-            return (
-              <Card
-                key={room.roomId}
-                owner={data.owner}
-                address={data.address}
-                description={data.description}
-                isProfileId={userId === data.ownerId}
-                topic={data.topic}
-                maxCount={data.maxCount}
-                members="1" //need to map
-                currentlocation={data.currentlocation}
-                destinationLocation={data.destinationLocation}
-                navigation={navigation}
-                timeLeft={'50 mins left'}
-              />
-            );
-          })}
+      <LinearGradient // Add LinearGradient as the outermost component
+        colors={['#C7F6C7', '#FFFFFF', '#FFFFFF']}>
+        <ScrollView contentContainerStyle={{flexGrow: 1}}>
+          <Input
+            placeholder="Search"
+            inputContainerStyle={{
+              backgroundColor: '#C7F6C7',
+              width: '100%',
+              borderBottomWidth: 0,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+            inputStyle={{
+              padding: 20,
+              backgroundColor: 'white',
+              borderRadius: 30,
+              borderBottomWidth: 0,
+            }}
+          />
+          <View style={styles.cardsContainer}>
+            {rooms.map(data => {
+              const room = new Room(data); // Create a Room instance
+              return (
+                <Card
+                  key={room.roomId}
+                  owner={data.owner}
+                  address={data.address}
+                  description={data.description}
+                  isProfileId={profileId === data.ownerId}
+                  topic={data.topic}
+                  maxCount={data.maxCount}
+                  members="1" //need to map
+                  currentlocation={data.currentlocation}
+                  destinationLocation={data.destinationLocation}
+                  navigation={navigation}
+                  timeLeft={'50 mins left'}
+                />
+              );
+            })}
+          </View>
+        </ScrollView>
+        <View style={styles.fabContainer}>
+          <FloatingAction
+            actions={actions}
+            buttonSize={72}
+            color="green"
+            onPressItem={name => {
+              if (name === 'createRoom') {
+                setIsBottomSheetOpen(true);
+                navigation.navigate('CreateRoom', {
+                  userId: userId,
+                  userName: userName,
+                });
+                // bottomSheetRef?.current?.expand(); // Expand the bottom drawer
+              } else {
+                console.log(`selected ${name}`);
+              }
+            }}
+          />
         </View>
-      </ScrollView>
-      <View style={styles.fabContainer}>
-        <FloatingAction
-          actions={actions}
-          buttonSize={72}
-          color="green"
-          onPressItem={name => {
-            if (name === 'createRoom') {
-              setIsBottomSheetOpen(true);
-              console.log('createing room from user id', userId);
-              
-              navigation.navigate('CreateRoom', {
-                userId: userId,
-                userName: userName,
-              });
-              // bottomSheetRef?.current?.expand(); // Expand the bottom drawer
-            } else {
-              console.log(`selected ${name}`);
-            }
-          }}
-        />
-      </View>
+      </LinearGradient>
     </SafeAreaView>
   );
 }

@@ -1,7 +1,8 @@
 import React from 'react';
 import {Text, View, Image, TouchableOpacity, StyleSheet} from 'react-native';
 import {Avatar} from '@rneui/themed';
-import 'react-native-url-polyfill/auto';
+import {LinearGradient} from 'expo-linear-gradient'; // Import LinearGradient
+import {MaterialIcons} from '@expo/vector-icons'; // Import MaterialIcons from expo vector icons
 
 function Card({
   owner,
@@ -21,7 +22,9 @@ function Card({
   };
 
   return (
-    <View style={styles.container}>
+    <LinearGradient // Add LinearGradient as the outermost component
+      colors={['#C7F6C7', '#FFFFFF', '#FFFFFF']}
+      style={styles.container}>
       <View style={styles.content}>
         <Avatar
           size={67}
@@ -74,14 +77,18 @@ function Card({
         ]}>
         <Text style={styles.buttonText}>{isProfileId ? 'Edit' : 'Join'}</Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => console.log('Chat button pressed')} // Handle chat button press
+        style={styles.chatButton}>
+        <MaterialIcons name="chat" size={24} color="white" />
+      </TouchableOpacity>
       <Text style={styles.timeLeft}>{timeLeft}</Text>
-    </View>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
     borderRadius: 10,
     marginTop: 10,
     padding: 15,
@@ -105,7 +112,8 @@ const styles = StyleSheet.create({
   owner: {
     fontSize: 20,
     marginBottom: 5,
-    fontFamily: 'System', // Change font family to System
+    fontFamily: 'Times New Roman',
+    fontStyle: 'italic',
   },
   description: {
     fontSize: 16,
@@ -120,6 +128,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginLeft: 5,
     flex: 1,
+    fontFamily: 'Times New Roman',
+    fontStyle: 'italic',
   },
   infoContainer: {
     flexDirection: 'row',
@@ -132,7 +142,8 @@ const styles = StyleSheet.create({
   infoText: {
     marginLeft: 5,
     maxWidth: '75%',
-    fontFamily: 'System', // Change font family to System
+    fontFamily: 'Times New Roman',
+    fontStyle: 'italic',
   },
   buttonContainer: {
     backgroundColor: '#5DB075',
@@ -146,13 +157,23 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontSize: 16,
-    fontFamily: 'System', // Change font family to System
+    fontFamily: 'Times New Roman',
+    fontStyle: 'italic',
+  },
+  chatButton: {
+    position: 'absolute',
+    top: 15,
+    right: 15,
+    backgroundColor: '#5DB075',
+    borderRadius: 20,
+    padding: 10,
   },
   timeLeft: {
     alignSelf: 'flex-end',
     marginTop: 10,
     fontSize: 14,
-    fontFamily: 'System', // Change font family to System
+    fontFamily: 'Times New Roman',
+    fontStyle: 'italic',
   },
 });
 

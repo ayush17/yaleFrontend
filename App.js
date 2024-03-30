@@ -13,6 +13,7 @@ import MapScreen from './components/MapScreen';
 import ProfileTab from './components/profile';
 import CreateRoomTab from './components/createRoom';
 import Login from './screens/Authentication';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Tab = createBottomTabNavigator();
 
@@ -28,7 +29,7 @@ const HomeStack = ({userid, username}) => {
         options={{
           title: 'Rooms',
           headerStyle: {
-            backgroundColor: '#E8E8E8',
+            backgroundColor: '#C7F6C7',
           },
           headerTintColor: 'black',
           headerTitleAlign: 'center',
@@ -124,8 +125,28 @@ export default () => {
       <NavigationContainer>
         {isLogin && ( // Render Tab.Navigator only if user is logged in
           <Tab.Navigator
-            screenOptions={{
+            screenOptions={({route}) => ({
+              tabBarIcon: ({color, size}) => {
+                let iconName;
+
+                if (route.name === 'Home') {
+                  iconName = 'home';
+                } else if (route.name === 'JoinedRooms') {
+                  iconName = 'account-group';
+                } else if (route.name === 'ChatTab') {
+                  iconName = 'message';
+                } else if (route.name === 'Profile') {
+                  iconName = 'account-circle';
+                }
+
+                // Return the icon component with the specified name
+                return <Icon name={iconName} size={size} color={color} />;
+              },
               headerShown: false, // Hide the header
+            })}
+            tabBarOptions={{
+              activeTintColor: 'green',
+              inactiveTintColor: 'gray',
             }}>
             <Tab.Screen
               name="Home"
