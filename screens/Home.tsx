@@ -93,6 +93,7 @@ function Home({navigation, route, userId, userName}) {
                 currentlocation={data.currentlocation}
                 destinationLocation={data.destinationLocation}
                 navigation={navigation}
+                timeLeft={'50 mins left'}
               />
             );
           })}

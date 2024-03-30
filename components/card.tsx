@@ -14,15 +14,15 @@ function Card({
   currentlocation,
   destinationLocation,
   navigation,
-}): React.JSX.Element {
+  timeLeft,
+}) {
   const handlePress = () => {
-    // Your button press logic here
     console.log('Button pressed');
   };
 
   return (
     <View style={styles.container}>
-      <View style={styles.avatarContainer}>
+      <View style={styles.content}>
         <Avatar
           size={67}
           rounded
@@ -32,48 +32,49 @@ function Card({
           titleStyle={{color: 'green'}}
           iconStyle={{backgroundColor: 'green'}}
         />
-      </View>
-      <View style={styles.detailsContainer}>
-        <Text style={styles.owner}>{owner}'s Room</Text>
-        <Text style={styles.description}>{description}</Text>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('MapScreen', {
-              from: 'home-screen',
-              currentlocation: currentlocation,
-              destinationLocation: destinationLocation,
-            });
-          }}>
-          <View style={styles.locationContainer}>
-            <Image source={require('../icons/location.jpg')} />
-            <Text style={styles.address} numberOfLines={2}>
-              {address}
-            </Text>
-          </View>
-        </TouchableOpacity>
-        <View style={styles.infoContainer}>
-          <Image source={require('../icons/Group.png')} />
-          <Text style={styles.memberCount}>
-            {members}/{maxCount}
-          </Text>
-        </View>
-        <View style={styles.infoContainer}>
-          <Image source={require('../icons/Book_open.jpg')} />
-          <Text style={styles.topic}>{topic}</Text>
-        </View>
-        {/* Button */}
-        <View
-          style={[
-            styles.buttonContainer,
-            {backgroundColor: isProfileId ? '#D3D3D3' : '#5DB075'},
-          ]}>
-          <TouchableOpacity onPress={handlePress} style={styles.button}>
-            <Text style={styles.buttonText}>
-              {isProfileId ? 'Edit' : 'Join'}
-            </Text>
+        <View style={styles.details}>
+          <Text style={styles.owner}>{owner}'s Room</Text>
+          <Text style={styles.description}>{description}</Text>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('MapScreen', {
+                from: 'home-screen',
+                currentlocation: currentlocation,
+                destinationLocation: destinationLocation,
+              });
+            }}>
+            <View style={styles.locationContainer}>
+              <Image source={require('../icons/location.jpg')} />
+              <Text style={styles.address} numberOfLines={2}>
+                {address}
+              </Text>
+            </View>
           </TouchableOpacity>
+          <View style={styles.infoContainer}>
+            <View style={styles.infoItem}>
+              <Image source={require('../icons/Group.png')} />
+              <Text style={styles.infoText}>
+                {members}/{maxCount}
+              </Text>
+            </View>
+            <View style={styles.infoItem}>
+              <Image source={require('../icons/Book_open.jpg')} />
+              <Text style={styles.infoText} numberOfLines={1}>
+                {topic}
+              </Text>
+            </View>
+          </View>
         </View>
       </View>
+      <TouchableOpacity
+        onPress={handlePress}
+        style={[
+          styles.buttonContainer,
+          {backgroundColor: isProfileId ? '#D3D3D3' : '#5DB075'},
+        ]}>
+        <Text style={styles.buttonText}>{isProfileId ? 'Edit' : 'Join'}</Text>
+      </TouchableOpacity>
+      <Text style={styles.timeLeft}>{timeLeft}</Text>
     </View>
   );
 }
@@ -81,59 +82,77 @@ function Card({
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
-    padding: 11,
-    width: '100%',
-    flexDirection: 'row',
     borderRadius: 10,
     marginTop: 10,
+    padding: 15,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
   },
-  avatarContainer: {
-    marginTop: 30,
-    marginLeft: 11,
+  content: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
-  detailsContainer: {
-    marginLeft: 25,
+  details: {
+    marginLeft: 15,
+    flex: 1,
   },
   owner: {
     fontSize: 20,
+    marginBottom: 5,
+    fontFamily: 'System', // Change font family to System
   },
   description: {
-    width: '60%',
-    marginTop: 1,
+    fontSize: 16,
+    marginBottom: 10,
   },
   locationContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 5,
+    marginBottom: 10,
   },
   address: {
-    fontSize: 12,
+    fontSize: 14,
+    marginLeft: 5,
     flex: 1,
   },
   infoContainer: {
     flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  infoItem: {
+    flexDirection: 'row',
     alignItems: 'center',
   },
-  memberCount: {
-    marginLeft: 7,
-  },
-  topic: {
-    marginLeft: 7,
+  infoText: {
+    marginLeft: 5,
+    maxWidth: '75%',
+    fontFamily: 'System', // Change font family to System
   },
   buttonContainer: {
+    backgroundColor: '#5DB075',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 10,
+    borderRadius: 8,
+    paddingVertical: 10,
     marginTop: 10,
-    width: '60%',
-  },
-  button: {
-    padding: 12,
-    borderRadius: 5,
+    width: '100%',
   },
   buttonText: {
     color: 'white',
     fontSize: 16,
+    fontFamily: 'System', // Change font family to System
+  },
+  timeLeft: {
+    alignSelf: 'flex-end',
+    marginTop: 10,
+    fontSize: 14,
+    fontFamily: 'System', // Change font family to System
   },
 });
 
