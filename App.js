@@ -83,15 +83,14 @@ const JoinedRoomsStack = () => {
   );
 };
 
-const ProfileStack = () => {
-  console.log('ChatUserName:', chatUserName);
+const ProfileStack = ({userid, username}) => {
   return (
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
       }}>
       <Stack.Screen name="ProfileRoom">
-        {props => <ProfileTab {...props} chatUserName={chatUserName} />}
+        {props => <ProfileTab {...props} userId={userid} userName={username} />}
       </Stack.Screen>
     </Stack.Navigator>
   );
@@ -139,7 +138,12 @@ export default () => {
                 return <ChatStack userid={userid} username={username} />;
               }}
             />
-            <Tab.Screen name="Profile" component={ProfileStack} />
+            <Tab.Screen
+              name="Profile"
+              component={() => {
+                return <ProfileStack userid={userid} username={username} />;
+              }}
+            />
           </Tab.Navigator>
         )}
       </NavigationContainer>
