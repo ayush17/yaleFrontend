@@ -16,6 +16,7 @@ import {
   createNewUser,
   createNewChannel,
   addUserToChannel,
+  addAdminToChannel,
 } from '../chatOperations';
 import {MaterialIcons} from '@expo/vector-icons';
 
@@ -40,6 +41,9 @@ const CreateRoomTab = ({navigation, data, route}) => {
   const [participantsCount, setParticipantsCount] = useState(1);
   useEffect(() => {
     console.log('Inside create Room tab', route.params);
+    console.log('=======BEFORE=========');
+    console.log('User', userId);
+    console.log('User', userName);
     if (route?.params?.data) {
       setAddress(route?.params?.data);
       setOrigin(route?.params?.currentLocation);
@@ -49,6 +53,7 @@ const CreateRoomTab = ({navigation, data, route}) => {
       setUserId(route?.params?.userId);
       setUsername(route?.params?.userName);
     }
+    
   }, [route.params]);
   const incrementParticipantCount = () => {
     setParticipantsCount(prevCount => prevCount + 1);
@@ -59,6 +64,12 @@ const CreateRoomTab = ({navigation, data, route}) => {
   };
   const Submit = async data => {
     try {
+
+      console.log('=======AFTER=========');
+    console.log('User', userId);
+    console.log('User', userName);
+
+
       const response = await fetch(
         'https://yalehack-production.up.railway.app/api/rooms',
         {
@@ -95,6 +106,7 @@ const CreateRoomTab = ({navigation, data, route}) => {
       bottomSheetRef?.current?.close();
       await createNewChannel(data.topic, data.topic);
       await addUserToChannel(data.topic, userId);
+      // await addAdminToChannel(data.topic, userId);
       navigation.navigate('Home');
     } catch (error) {
       console.error('Error:', error.message);

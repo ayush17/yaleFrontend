@@ -37,6 +37,8 @@ export const createNewChannel = async (channelid, channelName, members) => {
       // Add any other channel properties as needed
     };
 
+    console.log('\nchannelData:', channelData);
+
     const channel = chatClient.channel('messaging', channelid, channelData);
     const response = await channel.create();
     console.log('Channel created:', response);
@@ -56,6 +58,19 @@ export const addUserToChannel = async (channelId, userId) => {
     // Handle the successful addition of the user
   } catch (error) {
     console.error('Error adding user to channel:', error);
+    // Handle the error
+  }
+};
+
+// Function to add a user as channel_admin to a particular channel
+export const addAdminToChannel = async (channelId, userId) => {
+  try {
+    const channel = chatClient.channel('messaging', channelId);
+    const response = await channel.addModerators([userId]);
+    console.log('User added as admin to channel:', response);
+    // Handle the successful addition of the user
+  } catch (error) {
+    console.error('Error adding user as admin to channel:', error);
     // Handle the error
   }
 };

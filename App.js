@@ -98,8 +98,8 @@ const ProfileStack = ({userid, username}) => {
 
 export default () => {
   const [isLogin, setIsLogin] = useState(false);
-  const [userid, setuserid] = useState('');
-  const [username, setusername] = useState('');
+  const [userId, setuserId] = useState('');
+  const [userName, setuserName] = useState('');
   const [loginOrSignUP, setloginOrSignUP] = useState('login');
   const setLogin = prevState => {
     setIsLogin(prevState);
@@ -109,11 +109,13 @@ export default () => {
     return (
       <Login
         isLogin={isLogin}
+        userId={userId}
+        userName={userName}
         loginOrSignUP={loginOrSignUP}
         setloginOrSignUP={setloginOrSignUP}
         setLogin={setLogin}
-        setuserid={setuserid}
-        setusername={setusername}
+        setuserId={setuserId}
+        setuserName={setuserName}
       />
     );
   }
@@ -128,20 +130,22 @@ export default () => {
             <Tab.Screen
               name="Home"
               component={() => {
-                return <HomeStack userid={userid} username={username} />;
+                console.log('userid:', userId);
+                console.log('username:', userName);
+                return <HomeStack userid={userId} username={userName} />;
               }}
             />
             <Tab.Screen name="JoinedRooms" component={JoinedRoomsStack} />
             <Tab.Screen
               name="ChatTab"
               component={() => {
-                return <ChatStack userid={userid} username={username} />;
+                return <ChatStack userid={userId} username={userName} />;
               }}
             />
             <Tab.Screen
               name="Profile"
               component={() => {
-                return <ProfileStack userid={userid} username={username} />;
+                return <ProfileStack userid={userId} username={userName} />;
               }}
             />
           </Tab.Navigator>
