@@ -25,7 +25,7 @@ const HomeStack = ({userid, username}) => {
         )}
         // initialParams={{userId: userid, username: username}}
         options={{
-          title: 'Rooms',
+          title: 'Cubes',
           headerStyle: {
             backgroundColor: '#C7F6C7',
           },
@@ -56,7 +56,7 @@ const HomeStack = ({userid, username}) => {
         name="CreateRoom"
         component={CreateRoomTab}
         options={{
-          title: 'CreateRoom',
+          title: 'Create Cube',
           headerStyle: {
             backgroundColor: '#E8E8E8',
           },

@@ -13,17 +13,15 @@ import {
   addUserToChannel,
 } from '../chatOperations';
 import {useChatClient} from '../useChatClient';
+import {Avatar} from '@rneui/themed';
 import {StreamChat} from 'stream-chat';
 import {chatApiKey, chatUserId, chatUserName} from '../chatConfig';
-import { set } from 'react-hook-form';
-const Login = ({
-  // isLogin,
-  // setLogin,
-  // loginOrSignUP,
-  // setloginOrSignUP,
-  // setuserid,
-  // setusername,
+import {set} from 'react-hook-form';
+import {LinearGradient} from 'expo-linear-gradient';
+// Import the logo image
+import logo from '../assets/logo.png';
 
+const Login = ({
   isLogin,
   userId,
   userName,
@@ -31,12 +29,11 @@ const Login = ({
   setloginOrSignUP,
   setLogin,
   setuserId,
-  setuserName
+  setuserName,
 }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  useChatClient("user1","Pranshu");
-
+  useChatClient('user1', 'Pranshu');
 
   const chatClient = StreamChat.getInstance(chatApiKey);
   const handleLogin = () => {
@@ -47,7 +44,6 @@ const Login = ({
     };
     // Make a POST request
     fetch('https://yalehack-production.up.railway.app/api/users/login', {
-      // fetch('http://localhost:3000/api/users/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -117,70 +113,84 @@ const Login = ({
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>
-        {loginOrSignUP == 'login' ? 'Login' : 'Sign Up'}
-      </Text>
-      {loginOrSignUP == 'signup' && (
+    <LinearGradient
+      colors={['#C7F6C7', '#FFFFFF', '#FFFFFF']}
+      style={{flex: 1}}>
+      <View style={styles.content}>
+        {/* Use the Avatar component with the logo image */}
+        <Avatar
+          size={370} // Adjust the size here
+          rounded
+          source={logo}
+          titleStyle={{color: 'green'}}
+          iconStyle={{backgroundColor: 'green'}}
+        />
+        {/* Other card content */}
+      </View>
+      <View style={styles.container}>
+        <Text style={styles.titleStudy}>Study </Text>
+        <Text style={styles.titleCube}>Cube</Text>
+        {loginOrSignUP == 'signup' && (
+          <TextInput
+            style={styles.input}
+            placeholder="userId"
+            value={userId}
+            onChangeText={setuserId}
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
+        )}
+        {loginOrSignUP == 'signup' && (
+          <TextInput
+            style={styles.input}
+            placeholder="Name"
+            value={userName}
+            onChangeText={setuserName}
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
+        )}
         <TextInput
           style={styles.input}
-          placeholder="userId"
-          value={userId}
-          onChangeText={setuserId}
+          placeholder="Email"
+          value={email}
+          onChangeText={setEmail}
           keyboardType="email-address"
           autoCapitalize="none"
         />
-      )}
-      {loginOrSignUP == 'signup' && (
         <TextInput
           style={styles.input}
-          placeholder="Name"
-          value={userName}
-          onChangeText={setuserName}
-          keyboardType="email-address"
-          autoCapitalize="none"
+          placeholder="Password"
+          secureTextEntry
+          value={password}
+          onChangeText={setPassword}
         />
-      )}
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
 
-      {loginOrSignUP == 'signup' ? (
-        <TouchableOpacity style={styles.button} onPress={handleSignup}>
-          <Text style={styles.buttonText}>Signup</Text>
-        </TouchableOpacity>
-      ) : (
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
-      )}
+        {loginOrSignUP == 'signup' ? (
+          <TouchableOpacity style={styles.button} onPress={handleSignup}>
+            <Text style={styles.buttonText}>Signup</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity style={styles.button} onPress={handleLogin}>
+            <Text style={styles.buttonText}>Login</Text>
+          </TouchableOpacity>
+        )}
 
-      <Text
-        style={styles.switchText}
-        onPress={() => {
-          if (loginOrSignUP == 'login') {
-            setloginOrSignUP('signup');
-          } else {
-            setloginOrSignUP('login');
-          }
-        }}>
-        {loginOrSignUP == 'login'
-          ? "Don't have an account? Sign Up"
-          : 'Already have an account? Login'}
-      </Text>
-    </View>
+        <Text
+          style={styles.switchText}
+          onPress={() => {
+            if (loginOrSignUP == 'login') {
+              setloginOrSignUP('signup');
+            } else {
+              setloginOrSignUP('login');
+            }
+          }}>
+          {loginOrSignUP == 'login'
+            ? "Don't have an account? Sign Up"
+            : 'Already have an account? Login'}
+        </Text>
+      </View>
+    </LinearGradient>
   );
 };
 
@@ -191,10 +201,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
   },
-  title: {
+  titleStudy: {
+    fontSize: 33,
+    fontWeight: 'bold',
+    fontFamily: 'Times New Roman',
+    fontStyle: 'italic',
+    marginTop: 5,
+    marginBottom: 12,
+  },
+  titleCube: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginTop: -25,
+    fontFamily: 'Times New Roman',
+    fontStyle: 'italic',
+    marginBottom: 12,
   },
   input: {
     width: '100%',
@@ -208,7 +229,7 @@ const styles = StyleSheet.create({
   button: {
     width: '100%',
     height: 40,
-    backgroundColor: 'green',
+    backgroundColor: '#5DB075',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
@@ -218,6 +239,10 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  content: {
+    marginTop: 40,
+    marginLeft: 5,
   },
   switchText: {
     marginTop: 10,

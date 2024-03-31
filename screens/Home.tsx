@@ -112,7 +112,6 @@ function Home({navigation, route, userId, userName}) {
             <View style={styles.cardsContainer}>
               {filteredRooms.map(data => {
                 const room = new Room(data); // Create a Room instance
-                console.log('this is the user id', userId, data.ownerId);
                 return (
                   <Card
                     key={room.roomId}

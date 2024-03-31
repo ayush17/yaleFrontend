@@ -92,7 +92,7 @@ function Card({
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => console.log('Chat button pressed')} // Handle chat button press
+        onPress={() => navigation.navigate('ChatTab')} // Handle chat button press
         style={styles.chatButton}>
         <MaterialIcons name="chat" size={24} color="white" />
       </TouchableOpacity>
