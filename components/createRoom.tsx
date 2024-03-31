@@ -40,10 +40,10 @@ const CreateRoomTab = ({navigation, data, route}) => {
   const [userName, setUsername] = useState('');
   const [participantsCount, setParticipantsCount] = useState(1);
   useEffect(() => {
-    console.log('Inside create Room tab', route.params);
-    console.log('=======BEFORE=========');
-    console.log('User', userId);
-    console.log('User', userName);
+    // console.log('Inside create Room tab', route.params);
+    // console.log('=======BEFORE=========');
+    // console.log('User', userId);
+    // console.log('User', userName);
     if (route?.params?.data) {
       setAddress(route?.params?.data);
       setOrigin(route?.params?.currentLocation);
@@ -53,7 +53,6 @@ const CreateRoomTab = ({navigation, data, route}) => {
       setUserId(route?.params?.userId);
       setUsername(route?.params?.userName);
     }
-    
   }, [route.params]);
   const incrementParticipantCount = () => {
     setParticipantsCount(prevCount => prevCount + 1);
@@ -63,13 +62,12 @@ const CreateRoomTab = ({navigation, data, route}) => {
     setParticipantsCount(prevCount => Math.max(1, prevCount - 1)); // Ensure count never goes below 1
   };
   const Submit = async data => {
+    console.log('This is the userId and userName', userId, userName);
+    console.log('this is the data', data);
+    console.log('origin', origin);
+    console.log('destination', destination);
+    console.log('destination', selectedTime);
     try {
-
-      console.log('=======AFTER=========');
-    console.log('User', userId);
-    console.log('User', userName);
-
-
       const response = await fetch(
         'https://yalehack-production.up.railway.app/api/rooms',
         {
@@ -79,22 +77,63 @@ const CreateRoomTab = ({navigation, data, route}) => {
           },
           body: JSON.stringify({
             room: {
-              roomId: 5,
-              ownerId: userId,
-              owner: userName,
-              topic: data.topic,
-              maxCount: participantsCount,
-              address: address,
-              participants: [
-                {userId: 101, username: 'Ayush'},
-                {userId: 102, username: 'Pranshu'},
-                {userId: 103, username: 'Sara'},
-                {userId: 104, username: 'Alex'},
-              ],
-              currentLocation: origin,
-              destinationLocation: destination,
-              time: selectedTime,
-              description: data.description,
+              //   currentLocation: 'origin',
+              //   destinationLocation: 'destination',
+              //   roomId: 9,
+              //   ownerId: 'userId',
+              //   owner: 'userName',
+              //   topic: 'data.topic',
+              //   address: 'address',
+              //   maxCount: 3,
+
+              // currentLocation: origin,
+              // destinationLocation: destination,
+              //   // roomId: 9,
+              //   // ownerId: userId,
+              // owner: userName,
+              //   // topic: data.topic,
+              //   // address: address,
+              //   // maxCount: 3,
+              //   // participants: [
+              //   //   {
+              //   //     userId: 101,
+              //   //     username: 'Ayush',
+              //   //   },
+              //   //   {
+              //   //     userId: 102,
+              //   //     username: 'Pranshu',
+              //   //   },
+              //   //   {
+              //   //     userId: 103,
+              //   //     username: 'Sara',
+              //   //   },
+              //   //   {
+              //   //     userId: 104,
+              //   //     username: 'Alex',
+              //   //   },
+              //   // ],
+              //   // time: new Date(selectedTime),
+              //   time: new Date(),
+              //   description: 'data.description',
+              // },
+
+              // room: {
+              currentLocation: {
+                longitude: 22,
+                latitude: 22,
+              },
+              destinationLocation: {
+                longitude: 22,
+                latitude: 22,
+              },
+              roomId: 10,
+              ownerId: 9,
+              // owner: 's',
+              topic: 'tttttttt',
+              address: 'address',
+              maxCount: 3,
+              time: '2022',
+              description: 'data.description',
             },
           }),
         },
@@ -102,7 +141,7 @@ const CreateRoomTab = ({navigation, data, route}) => {
       if (!response.ok) {
         throw new Error('Failed to submit room data');
       }
-
+      console.log('this is the response', response);
       bottomSheetRef?.current?.close();
       await createNewChannel(data.topic, data.topic);
       await addUserToChannel(data.topic, userId);
@@ -112,8 +151,8 @@ const CreateRoomTab = ({navigation, data, route}) => {
       console.error('Error:', error.message);
       // Handle error, e.g., display an error message to the user
     }
-    bottomSheetRef?.current?.close();
   };
+
   const handleLocation = () => {
     navigation.navigate('MapScreen');
   };
