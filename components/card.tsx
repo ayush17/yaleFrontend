@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Text, View, Image, TouchableOpacity, StyleSheet} from 'react-native';
 import {Avatar} from '@rneui/themed';
 import {LinearGradient} from 'expo-linear-gradient'; // Import LinearGradient
@@ -17,8 +17,10 @@ function Card({
   navigation,
   timeLeft,
 }) {
-  const handlePress = () => {
-    console.log('Button pressed');
+  const [isJoined, setIsJoined] = useState(false); // State to track if the card is joined
+
+  const handleJoin = () => {
+    setIsJoined(true); // Set isJoined to true when the join button is clicked
   };
 
   return (
@@ -70,12 +72,20 @@ function Card({
         </View>
       </View>
       <TouchableOpacity
-        onPress={handlePress}
+        onPress={handleJoin}
         style={[
           styles.buttonContainer,
-          {backgroundColor: isProfileId ? '#D3D3D3' : '#5DB075'},
+          {
+            backgroundColor: isProfileId
+              ? '#D3D3D3'
+              : isJoined
+              ? '#FFA500'
+              : '#5DB075',
+          }, // Change button color to orange when joined
         ]}>
-        <Text style={styles.buttonText}>{isProfileId ? 'Edit' : 'Join'}</Text>
+        <Text style={styles.buttonText}>
+          {isProfileId ? 'Edit' : isJoined ? 'Joined' : 'Join'}
+        </Text>
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => console.log('Chat button pressed')} // Handle chat button press

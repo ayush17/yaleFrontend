@@ -6,9 +6,7 @@ import ChatStack from './components/chat';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 const Stack = createStackNavigator();
 import Home from './screens/Home';
-import JoinedRooms from './components/joinedRoom';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {chatUserName} from './chatConfig';
 import MapScreen from './components/MapScreen';
 import ProfileTab from './components/profile';
 import CreateRoomTab from './components/createRoom';
@@ -73,17 +71,6 @@ const HomeStack = ({userid, username}) => {
   );
 };
 
-const JoinedRoomsStack = () => {
-  return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false, // Hide the header
-      }}>
-      <Stack.Screen name="JoinedRooms" component={JoinedRooms} />
-    </Stack.Navigator>
-  );
-};
-
 const ProfileStack = ({userid, username}) => {
   return (
     <Stack.Navigator
@@ -131,8 +118,6 @@ export default () => {
 
                 if (route.name === 'Home') {
                   iconName = 'home';
-                } else if (route.name === 'JoinedRooms') {
-                  iconName = 'account-group';
                 } else if (route.name === 'ChatTab') {
                   iconName = 'message';
                 } else if (route.name === 'Profile') {
@@ -156,7 +141,6 @@ export default () => {
                 return <HomeStack userid={userId} username={userName} />;
               }}
             />
-            <Tab.Screen name="JoinedRooms" component={JoinedRoomsStack} />
             <Tab.Screen
               name="ChatTab"
               component={() => {

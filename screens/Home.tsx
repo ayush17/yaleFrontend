@@ -23,10 +23,13 @@ function Home({navigation, route, userId, userName}) {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const profileId = 1;
   const [rooms, setRooms] = useState([]);
-  // State for form inputs
+  const [searchQuery, setSearchQuery] = useState(''); // State for search query
+
+  // State for filtered rooms
+  const [filteredRooms, setFilteredRooms] = useState([]);
+
   const chatClient = StreamChat.getInstance(chatApiKey);
   useChatClient(userId, userName);
-  console.log('Connected user inside home', userId, userName);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -37,6 +40,7 @@ function Home({navigation, route, userId, userName}) {
           );
           const data = await response.json();
           setRooms(data);
+          setFilteredRooms(data); // Initialize filteredRooms with all rooms
         } catch (error) {
           console.error('Error fetching rooms:', error);
         }
@@ -45,6 +49,16 @@ function Home({navigation, route, userId, userName}) {
       fetchRooms();
     }, []),
   );
+
+  // Function to handle search query change
+  const handleSearch = query => {
+    setSearchQuery(query);
+    // Filter rooms based on search query
+    const filtered = rooms.filter(room =>
+      room.topic.toLowerCase().includes(query.toLowerCase()),
+    );
+    setFilteredRooms(filtered);
+  };
 
   const actions = [
     {
@@ -65,13 +79,15 @@ function Home({navigation, route, userId, userName}) {
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      <LinearGradient // Add LinearGradient as the outermost component
+      <LinearGradient
         colors={['#C7F6C7', '#FFFFFF', '#FFFFFF']}
         style={{flex: 1}}>
         <View style={{flex: 1}}>
           <ScrollView contentContainerStyle={{flexGrow: 1}}>
             <Input
               placeholder="Search"
+              value={searchQuery} // Bind input value to searchQuery state
+              onChangeText={handleSearch} // Handle search query change
               inputContainerStyle={{
                 backgroundColor: '#C7F6C7',
                 width: '100%',
@@ -87,15 +103,16 @@ function Home({navigation, route, userId, userName}) {
               }}
             />
             <View style={styles.cardsContainer}>
-              {rooms.map(data => {
+              {filteredRooms.map(data => {
                 const room = new Room(data); // Create a Room instance
+                console.log('this is the user id', userId, data.ownerId);
                 return (
                   <Card
                     key={room.roomId}
                     owner={data.owner}
                     address={data.address}
                     description={data.description}
-                    isProfileId={profileId === data.ownerId}
+                    isProfileId={userId === data.ownerId}
                     topic={data.topic}
                     maxCount={data.maxCount}
                     members="1" //need to map
