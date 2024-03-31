@@ -74,3 +74,17 @@ export const addAdminToChannel = async (channelId, userId) => {
     // Handle the error
   }
 };
+
+// Function to get all members of a channel
+export const getChannelMembers = async channelId => {
+  try {
+    const channel = chatClient.channel('messaging', channelId);
+    const response = await channel.queryMembers({});
+    console.log('Channel members:', typeof response.members.length);
+    // Handle the successful retrieval of the members
+    return response.members.length;
+  } catch (error) {
+    console.error('Error getting channel members:', error);
+    // Handle the error
+  }
+};

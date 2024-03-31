@@ -18,6 +18,7 @@ import {chatApiKey, chatUserId, chatUserName} from '../chatConfig';
 import {Room} from '../model/room';
 
 import CreateRoomTab from '../components/createRoom';
+import { getChannelMembers } from '../chatOperations';
 
 function Home({navigation, route, userId, userName}) {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
@@ -77,6 +78,12 @@ function Home({navigation, route, userId, userName}) {
     },
   ];
 
+  function getParticipantsNumber(data) {
+    console.log('participants', data);
+    return getChannelMembers(data.topic);
+    // return 2;
+  }
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <LinearGradient
@@ -109,13 +116,14 @@ function Home({navigation, route, userId, userName}) {
                 return (
                   <Card
                     key={room.roomId}
+                    userId={userId}
                     owner={data.owner}
                     address={data.address}
                     description={data.description}
                     isProfileId={userId === data.ownerId}
                     topic={data.topic}
                     maxCount={data.maxCount}
-                    members="1" //need to map
+                     members={typeof getParticipantsNumber(data) === 'object' ? 2 : getParticipantsNumber(data)}
                     currentlocation={data.currentlocation}
                     destinationLocation={data.destinationLocation}
                     navigation={navigation}

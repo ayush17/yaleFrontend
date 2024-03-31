@@ -3,8 +3,10 @@ import {Text, View, Image, TouchableOpacity, StyleSheet} from 'react-native';
 import {Avatar} from '@rneui/themed';
 import {LinearGradient} from 'expo-linear-gradient'; // Import LinearGradient
 import {MaterialIcons} from '@expo/vector-icons'; // Import MaterialIcons from expo vector icons
+import { addUserToChannel } from '../chatOperations';
 
 function Card({
+  userId,
   owner,
   isProfileId,
   description,
@@ -20,7 +22,9 @@ function Card({
   const [isJoined, setIsJoined] = useState(false); // State to track if the card is joined
 
   const handleJoin = () => {
+    addUserToChannel(topic,userId); // Add user to channel when join button is clicked
     setIsJoined(true); // Set isJoined to true when the join button is clicked
+
   };
 
   return (
